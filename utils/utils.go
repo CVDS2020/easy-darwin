@@ -242,7 +242,7 @@ func PauseGo(msg ...interface{}) {
 }
 
 func IsPortInUse(port int) bool {
-	if conn, err := net.DialTimeout("tcp", net.JoinHostPort("", fmt.Sprintf("%d", port)), 3*time.Second); err == nil {
+	if conn, err := net.DialTimeout("tcp", net.JoinHostPort("", fmt.Sprintf("%d", port)), time.Millisecond*10); err == nil {
 		conn.Close()
 		return true
 	}

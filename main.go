@@ -11,12 +11,12 @@ import (
 
 	"github.com/suy/easy-darwin/db"
 
+	figure "github.com/common-nighthawk/go-figure"
 	"github.com/suy/easy-darwin/models"
 	"github.com/suy/easy-darwin/routers"
 	"github.com/suy/easy-darwin/rtsp"
-	figure "github.com/common-nighthawk/go-figure"
-	"github.com/suy/easy-darwin/utils"
 	"github.com/suy/easy-darwin/service"
+	"github.com/suy/easy-darwin/utils"
 )
 
 var (
@@ -129,8 +129,8 @@ func (p *program) Start(s service.Service) (err error) {
 		log.Printf("demon pull streams")
 		for {
 			var streams []models.Stream
-			db.SQLite.Find(&streams)
-			if err := db.SQLite.Find(&streams).Error; err != nil {
+			db.Mysql.Find(&streams)
+			if err := db.Mysql.Find(&streams).Error; err != nil {
 				log.Printf("find stream err:%v", err)
 				return
 			}

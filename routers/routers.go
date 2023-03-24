@@ -12,9 +12,9 @@ import (
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
-	"github.com/suy/easy-darwin/utils"
 	"github.com/suy/easy-darwin/cors"
 	"github.com/suy/easy-darwin/sessions"
+	"github.com/suy/easy-darwin/utils"
 	validator "gopkg.in/go-playground/validator.v8"
 )
 
@@ -111,7 +111,7 @@ func Init() (err error) {
 	Router.Use(Errors())
 	Router.Use(cors.Default())
 
-	store := sessions.NewGormStoreWithOptions(db.SQLite, sessions.GormStoreOptions{
+	store := sessions.NewGormStoreWithOptions(db.Mysql, sessions.GormStoreOptions{
 		TableName: "t_sessions",
 	}, []byte("EasyDarwin@2018"))
 	tokenTimeout := utils.Conf().Section("http").Key("token_timeout").MustInt(7 * 86400)

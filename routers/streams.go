@@ -7,11 +7,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/suy/easy-darwin/models"
 	"github.com/suy/easy-darwin/db"
+	"github.com/suy/easy-darwin/models"
 
-	"github.com/suy/easy-darwin/rtsp"
 	"github.com/gin-gonic/gin"
+	"github.com/suy/easy-darwin/rtsp"
 )
 
 /**
@@ -85,10 +85,10 @@ func (h *APIHandler) StreamStart(c *gin.Context) {
 		IdleTimeout:       form.IdleTimeout,
 		HeartbeatInterval: form.HeartbeatInterval,
 	}
-	if db.SQLite.Where(&models.Stream{URL: form.URL}).First(&models.Stream{}).RecordNotFound() {
-		db.SQLite.Create(&stream)
+	if db.Mysql.Where(&models.Stream{URL: form.URL}).First(&models.Stream{}).RecordNotFound() {
+		db.Mysql.Create(&stream)
 	} else {
-		db.SQLite.Save(&stream)
+		db.Mysql.Save(&stream)
 	}
 	c.IndentedJSON(200, pusher.ID())
 }
@@ -119,7 +119,7 @@ func (h *APIHandler) StreamStop(c *gin.Context) {
 			if v.RTSPClient != nil {
 				var stream models.Stream
 				stream.URL = v.RTSPClient.URL
-				db.SQLite.Delete(stream)
+				db.Mysql.Delete(stream)
 			}
 			return
 		}

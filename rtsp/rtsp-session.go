@@ -17,8 +17,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/suy/easy-darwin/models"
 	"github.com/suy/easy-darwin/db"
+	"github.com/suy/easy-darwin/models"
 	"github.com/suy/easy-darwin/utils"
 
 	"github.com/teris-io/shortid"
@@ -345,7 +345,7 @@ func CheckAuth(authLine string, method string, sessionNonce string) error {
 		return fmt.Errorf("CheckAuth error : uri not found")
 	}
 	var user models.User
-	err := db.SQLite.Where("Username = ?", username).First(&user).Error
+	err := db.Mysql.Where("Username = ?", username).First(&user).Error
 	if err != nil {
 		return fmt.Errorf("CheckAuth error : user not exists")
 	}

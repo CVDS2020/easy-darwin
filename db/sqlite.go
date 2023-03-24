@@ -1,11 +1,8 @@
 package db
 
 import (
-	"fmt"
-	"log"
-
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/suy/easy-darwin/utils"
 )
 
@@ -16,29 +13,28 @@ type Model struct {
 	// DeletedAt *time.Time `sql:"index" structs:"-"`
 }
 
-var SQLite *gorm.DB
+var Mysql *gorm.DB
 
 func Init() (err error) {
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTablename string) string {
 		return "t_" + defaultTablename
 	}
-	dbFile := utils.DBFile()
-	log.Println("db file -->", utils.DBFile())
-	SQLite, err = gorm.Open("sqlite3", fmt.Sprintf("%s?loc=Asia/Shanghai", dbFile))
+	dbDsn := utils.Conf().Section("db").Key("dsn").MustString("root:css66018@(localhost)/easydarwin?charset=utf8&parseTime=True&loc=Local")
+	Mysql, err = gorm.Open("mysql", dbDsn)
 	if err != nil {
 		return
 	}
 	// Sqlite cannot handle concurrent writes, so we limit sqlite to one connection.
 	// see https://github.com/mattn/go-sqlite3/issues/274
-	SQLite.DB().SetMaxOpenConns(1)
-	SQLite.SetLogger(DefaultGormLogger)
-	SQLite.LogMode(false)
+	Mysql.DB().SetMaxOpenConns(1)
+	Mysql.SetLogger(DefaultGormLogger)
+	Mysql.LogMode(false)
 	return
 }
 
 func Close() {
-	if SQLite != nil {
-		SQLite.Close()
-		SQLite = nil
+	if Mysql != nil {
+		Mysql.Close()
+		Mysql = nil
 	}
 }
